@@ -49,8 +49,10 @@ qMaxDate <- qMaxDate$maxDate
 
 newRecords <- filter(counties_csv, counties_csv$date > qMaxDate)
 head(newRecords)
- 
 
+
+# Send it up  
+sqlSave(con, newRecords, tablename = "COVID.counties", rownames = F, append = T)
 
 
 ## CLEAN UP AFTER YOURSELF ##
