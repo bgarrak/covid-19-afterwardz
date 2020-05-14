@@ -29,7 +29,7 @@ datset_states_url <- "https://github.com/nytimes/covid-19-data/raw/master/us-sta
 
 counties_csv <- read_csv(url(dataset_counties_url))
 
-states _csv <- read_csv(url(dataset_states_url))
+states_csv <- read_csv(url(dataset_states_url))
 
 ################################################################################################
 
