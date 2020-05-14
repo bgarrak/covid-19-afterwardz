@@ -45,6 +45,7 @@ con <- odbcConnect("covidSQLPipe", uid = u, pwd = p)
 
 
 qMaxDate <- sqlQuery(con, "SELECT max(date) as maxDate FROM [COVID].[counties]")
+qMaxDate <- qMaxDate$maxDate
 
 newRecords <- filter(counties_csv, counties_csv$date > qMaxDate)
 head(newRecords)
@@ -54,4 +55,3 @@ head(newRecords)
 
 ## CLEAN UP AFTER YOURSELF ##
 odbcCloseAll() 
-
