@@ -26,6 +26,7 @@ dataset_counties_url <- "https://raw.githubusercontent.com/nytimes/covid-19-data
 
 dataset_states_url <- "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv"
 
+### Assign csvs to a variable ###
 
 counties_csv <- read_csv(url(dataset_counties_url))
 
