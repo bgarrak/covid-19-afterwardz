@@ -13,13 +13,12 @@ if(!require(RODBC)){install.packages("RODBC")
 	library(RODBC)}
 if(!require(sqldf)){install.packages("sqldf")
 	library(sqldf)}
-if(!require(stringr)){install.packages("stringr")
-	library(stringr)}
-
-setwd <- "Z:/covidData"
+if(!require(readr)){install.packages("readr")
+	library(readr)}
 
 ################################################################################################
 
+setwd <- "Z:/covidData"
 
 ### NYT Covid github dataset url ###
 
@@ -44,35 +43,41 @@ con <- odbcConnect("covidSQLPipe", uid = u, pwd = p)
 # test  <- sqlQuery(con, "SELECT * FROM [COVID].[counties]")
 
 # How many records are in the databases?
-qCountyRecCnt
+#qCountyRecCnt
 
-qStateRecCnt
+#qStateRecCnt
 
-qMaxDate <- sqlQuery(con, "SELECT max(date) as maxDate FROM [COVID].[counties]")
-qMaxDate <- qMaxDate$maxDate
+################################################################################################
+
+# How up to date is the counties table?
+qCountieMaxDate <- sqlQuery(con, "SELECT max(date) as maxDate FROM [COVID].[counties]")
+qCountieMaxDate <- qCountieMaxDate$maxDate
 
 
-# Select only the new records from github
+# Select only the new records from the github data
 newRecords <- filter(counties_csv, counties_csv$date > qMaxDate)
 head(newRecords)
 
 
-# Send it up  
+# Update to the counties table
 sqlSave(con, newRecords, tablename = "COVID.counties", rownames = F, append = T)
 
 ################################################################################################
 
-
+# How up to date is the states table?
 qStateMaxDate <- sqlQuery(con, "SELECT max(date) as maxDate FROM [COVID].[states]")
 qStateMaxDate <- qStateMaxDate$maxDate
 
 
+# Select only the new records from the github data
 newStateRecords <- filter(states_csv, states_csv$date > qStateMaxDate)
 head(newStateRecords)
 
 
+# Update to the state table
 sqlSave(con, newStateRecords, tablename = "COVID.states", rownames = F, append = T)
 
+################################################################################################
 
 ## CLEAN UP AFTER YOURSELF ##
 odbcCloseAll() 
