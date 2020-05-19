@@ -2,7 +2,6 @@ library("tidyverse")
 library("RODBC")
 library("sqldf")
 library("readr")
-# library("stringr")
 
 ################################################################################################
 
@@ -17,6 +16,12 @@ if(!require(readr)){install.packages("readr")
 	library(readr)}
 
 ################################################################################################
+
+
+
+
+################################################################################################
+
 
 setwd <- "Z:/covidData"
 
@@ -51,12 +56,12 @@ con <- odbcConnect("covidSQLPipe", uid = u, pwd = p)
 ################################################################################################
 
 # How up to date is the counties table?
-qCountieMaxDate <- sqlQuery(con, "SELECT max(date) as maxDate FROM [COVID].[counties]")
-qCountieMaxDate <- qCountieMaxDate$maxDate
+qCountyMaxDate <- sqlQuery(con, "SELECT max(date) as maxDate FROM [COVID].[counties]")
+qCountyMaxDate <- qCountyMaxDate$maxDate
 
 
 # Select only the new records from the github data
-newRecords <- filter(counties_csv, counties_csv$date > qMaxDate)
+newRecords <- filter(counties_csv, counties_csv$date > qCountyMaxDate)
 head(newRecords)
 
 
