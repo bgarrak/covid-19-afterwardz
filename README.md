@@ -8,3 +8,4 @@
   * Add any new records
   * Log results to a file
   * Email admin if failure to update or if duplicates are detected
+  * Run on a daily basis (Task Scheduler)
