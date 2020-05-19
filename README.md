@@ -6,3 +6,5 @@
   * Open an ODBC channel to the afterwardz covid database
   * Determine the most recent record in the database
   * Add any new records
+  * Log results to a file
+  * Email admin if failure to update or if duplicates are detected
