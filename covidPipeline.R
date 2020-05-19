@@ -25,12 +25,12 @@ setwd <- "Z:/covidData"
 
 dataset_counties_url <- "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv"
 
-# dataset_states_url <- "https://github.com/nytimes/covid-19-data/raw/master/us-states.csv"
+dataset_states_url <- "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv"
 
 
 counties_csv <- read_csv(url(dataset_counties_url))
 
-# states_csv <- read_csv(url(dataset_states_url))
+states_csv <- read_csv(url(dataset_states_url))
 
 ################################################################################################
 
@@ -51,6 +51,7 @@ qStateRecCnt
 qMaxDate <- sqlQuery(con, "SELECT max(date) as maxDate FROM [COVID].[counties]")
 qMaxDate <- qMaxDate$maxDate
 
+
 # Select only the new records from github
 newRecords <- filter(counties_csv, counties_csv$date > qMaxDate)
 head(newRecords)
@@ -58,6 +59,19 @@ head(newRecords)
 
 # Send it up  
 sqlSave(con, newRecords, tablename = "COVID.counties", rownames = F, append = T)
+
+################################################################################################
+
+
+qStateMaxDate <- sqlQuery(con, "SELECT max(date) as maxDate FROM [COVID].[states]")
+qStateMaxDate <- qStateMaxDate$maxDate
+
+
+newStateRecords <- filter(states_csv, states_csv$date > qStateMaxDate)
+head(newStateRecords)
+
+
+sqlSave(con, newStateRecords, tablename = "COVID.states", rownames = F, append = T)
 
 
 ## CLEAN UP AFTER YOURSELF ##
