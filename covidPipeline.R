@@ -2,6 +2,7 @@ library("tidyverse")
 library("RODBC")
 library("sqldf")
 library("readr")
+library("lubridate")
 
 ################################################################################################
 
@@ -14,11 +15,13 @@ if(!require(sqldf)){install.packages("sqldf")
 	library(sqldf)}
 if(!require(readr)){install.packages("readr")
 	library(readr)}
+if(!require(lubridate)){install.packages("lubridate")
+	library(lubridate)}
 
 ################################################################################################
 
 
-### This code will run on a daily basis at 9:01 AM PST, IF THE USER IS LOGGED IN ###
+### This code will run on a daily basis at 9:01 AM and 1:01 PM PST, IF THE USER IS LOGGED IN ###
 
 
 ################################################################################################
@@ -88,3 +91,9 @@ sqlSave(con, newStateRecords, tablename = "COVID.states", rownames = F, append =
 
 ## CLEAN UP AFTER YOURSELF ##
 odbcCloseAll() 
+
+################################################################################################
+
+### Error Loging ###
+
+
