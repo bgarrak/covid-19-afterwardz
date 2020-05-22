@@ -3,6 +3,7 @@ library("RODBC")
 library("sqldf")
 library("readr")
 library("lubridate")
+library("gmailr")
 
 ################################################################################################
 
@@ -17,7 +18,8 @@ if(!require(readr)){install.packages("readr")
 	library(readr)}
 if(!require(lubridate)){install.packages("lubridate")
 	library(lubridate)}
-
+if(!require(gmailr)){install.packages("gmailr")
+	library(gmailr)}
 ################################################################################################
 
 
@@ -27,7 +29,7 @@ if(!require(lubridate)){install.packages("lubridate")
 ################################################################################################
 
 
-setwd <- "Z:/covidData"
+setwd <- Sys.getenv("A_WkD")
 
 ### NYT Covid github dataset url ###
 
@@ -43,12 +45,19 @@ states_csv <- read_csv(url(dataset_states_url))
 
 ################################################################################################
 
-
+######################################################
 ### Use environmental variables for authentication ### 
 u <- Sys.getenv("A_SSMS_Login")
 p <- Sys.getenv("A_SSMS_PWD")
 
+### Environmental variables ###
+errorEnv <- Sys.getenv("A_D_ERROR")
+logEnv <- Sys.getenv("A_D_Log")
+
+######################################################
+
 con <- odbcConnect("covidSQLPipe", uid = u, pwd = p)
+
 
 # test  <- sqlQuery(con, "SELECT * FROM [COVID].[counties]")
 
@@ -68,9 +77,35 @@ qCountyMaxDate <- qCountyMaxDate$maxDate
 newRecords <- filter(counties_csv, counties_csv$date > qCountyMaxDate)
 head(newRecords)
 
+# How many new records are there?
+rec <- count(newRecords)
+rec <- as.numeric(rec)
 
-# Update to the counties table
-sqlSave(con, newRecords, tablename = "COVID.counties", rownames = F, append = T)
+### Sorting for log
+if(rec > 0) {
+	# Update to the counties table and update the log with the date and 
+	sqlSave(con, newRecords, tablename = "COVID.counties", rownames = F, append = T)
+	time <- now()
+	str <- "New COUNTY records were ADDED on:" 
+	newData <- cat(str, time)
+
+	write.table(none, file = logEnv, append = TRUE, row.names = FALSE, col.names = FALSE)
+} else if (rec == 0) {
+	# Print the date and time that the found no new data but operated successfully
+	time <- now()
+	str <- "No new COUNTY records to add." 
+	none <- paste(str, time)
+
+	write.table(none, file = logEnv, append = TRUE, row.names = FALSE, col.names = FALSE)
+} else {
+	### Serious ERROR has occured if this is activated ###
+	time <- now()
+	str <- "A serious ERROR has occured in the COUNTIES COVID pipeline." 
+	none <- paste(str, time)
+
+	write.table(none, file = errorEnv, append = TRUE, row.names = FALSE,
+}
+
 
 ################################################################################################
 
@@ -93,7 +128,4 @@ sqlSave(con, newStateRecords, tablename = "COVID.states", rownames = F, append =
 odbcCloseAll() 
 
 ################################################################################################
-
-### Error Loging ###
-
 
