@@ -51,6 +51,9 @@ u <- Sys.getenv("A_SSMS_Login")
 p <- Sys.getenv("A_SSMS_PWD")
 
 ### Environmental variables ###
+gmail <- Sys.getenv("A_OAuth")
+notifyMe <- Sys.getenv("A_School")
+from <- Sys.getenv("A_Service_From")
 errorEnv <- Sys.getenv("A_D_ERROR")
 logEnv <- Sys.getenv("A_D_Log")
 
@@ -59,7 +62,7 @@ logEnv <- Sys.getenv("A_D_Log")
 con <- odbcConnect("covidSQLPipe", uid = u, pwd = p)
 
 
-# test  <- sqlQuery(con, "SELECT * FROM [COVID].[counties]")
+		# test  <- sqlQuery(con, "SELECT * FROM [COVID].[counties]")
 
 # How many records are in the databases?
 #qCountyRecCnt
@@ -97,6 +100,19 @@ if(rec > 0) {
 	none <- paste(str, time)
 
 	write.table(none, file = logEnv, append = TRUE, row.names = FALSE, col.names = FALSE)
+
+
+
+	### Allow for error emails ###
+	use_secret_file(gmail)
+
+	email <- gm_mime() %>%
+		gm_to(notifyMe) %>%
+		gm_from(from) %>%
+		gm_subject("Test subject") %>%
+		gm_html_body("<html>Test <strong>email</strong> body</html>")
+
+
 } else {
 	### Serious ERROR has occured if this is activated ###
 	time <- now()
@@ -104,6 +120,17 @@ if(rec > 0) {
 	none <- paste(str, time)
 
 	write.table(none, file = errorEnv, append = TRUE, row.names = FALSE,
+
+
+	### Allow for error emails ###
+	use_secret_file(gmail)
+
+	email <- gm_mime() %>%
+		gm_to(notifyMe) %>%
+		gm_from(from) %>%
+		gm_subject("Test subject") %>%
+  		gm_html_body("<html>Test <strong>email</strong> body</html>")
+
 }
 
 
