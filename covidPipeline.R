@@ -3,7 +3,7 @@ library("RODBC")
 library("sqldf")
 library("readr")
 library("lubridate")
-library("gmailr")
+library("mailR")
 
 ################################################################################################
 
@@ -18,8 +18,8 @@ if(!require(readr)){install.packages("readr")
 	library(readr)}
 if(!require(lubridate)){install.packages("lubridate")
 	library(lubridate)}
-if(!require(gmailr)){install.packages("gmailr")
-	library(gmailr)}
+if(!require(mailR)){install.packages("mailR")
+	library(mailR)}
 ################################################################################################
 
 
@@ -100,37 +100,13 @@ if(rec > 0) {
 	none <- paste(str, time)
 
 	write.table(none, file = logEnv, append = TRUE, row.names = FALSE, col.names = FALSE)
-
-
-
-	### Allow for error emails ###
-	use_secret_file(gmail)
-
-	email <- gm_mime() %>%
-		gm_to(notifyMe) %>%
-		gm_from(from) %>%
-		gm_subject("Test subject") %>%
-		gm_html_body("<html>Test <strong>email</strong> body</html>")
-
-
 } else {
 	### Serious ERROR has occured if this is activated ###
 	time <- now()
 	str <- "A serious ERROR has occured in the COUNTIES COVID pipeline." 
 	none <- paste(str, time)
 
-	write.table(none, file = errorEnv, append = TRUE, row.names = FALSE,
-
-
-	### Allow for error emails ###
-	use_secret_file(gmail)
-
-	email <- gm_mime() %>%
-		gm_to(notifyMe) %>%
-		gm_from(from) %>%
-		gm_subject("Test subject") %>%
-  		gm_html_body("<html>Test <strong>email</strong> body</html>")
-
+	write.table(none, file = errorEnv, append = TRUE, row.names = FALSE, col.names = FALSE)
 }
 
 
@@ -156,3 +132,20 @@ odbcCloseAll()
 
 ################################################################################################
 
+
+
+
+
+
+
+
+
+
+
+
+
+################
+
+# count <- sqlQuery(con, "SELECT max(date) as maxdate, count(distinct date) as recct FROM [COVID].[V_DailyCounty] group by date order by date desc")
+
+#########
