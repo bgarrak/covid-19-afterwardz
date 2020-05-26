@@ -3,7 +3,7 @@ library("RODBC")
 library("sqldf")
 library("readr")
 library("lubridate")
-library("mailR")
+# library("mailr")
 
 ################################################################################################
 
@@ -18,8 +18,8 @@ if(!require(readr)){install.packages("readr")
 	library(readr)}
 if(!require(lubridate)){install.packages("lubridate")
 	library(lubridate)}
-if(!require(mailR)){install.packages("mailR")
-	library(mailR)}
+# if(!require(mailR)){install.packages("mailR")
+#	library(mailR)}
 ################################################################################################
 
 
@@ -87,22 +87,22 @@ rec <- as.numeric(rec)
 ### Sorting for log
 if(rec > 0) {
 	# Update to the counties table and update the log with the date and 
-	sqlSave(con, newRecords, tablename = "COVID.counties", rownames = F, append = T)
-	time <- now()
+	#sqlSave(con, newRecords, tablename = "COVID.counties", rownames = F, append = T)
+	time <- as.character(now())
 	str <- "New COUNTY records were ADDED on:" 
-	newData <- cat(str, time)
+	newData <- as.character(paste(str, time))
 
-	write.table(none, file = logEnv, append = TRUE, row.names = FALSE, col.names = FALSE)
+	write.table(newData, file = logEnv, append = TRUE, row.names = FALSE, col.names = FALSE)
 } else if (rec == 0) {
 	# Print the date and time that the found no new data but operated successfully
-	time <- now()
+	time <- as.character(now())
 	str <- "No new COUNTY records to add." 
 	none <- paste(str, time)
 
 	write.table(none, file = logEnv, append = TRUE, row.names = FALSE, col.names = FALSE)
 } else {
 	### Serious ERROR has occured if this is activated ###
-	time <- now()
+	time <- as.character(now())
 	str <- "A serious ERROR has occured in the COUNTIES COVID pipeline." 
 	none <- paste(str, time)
 
