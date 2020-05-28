@@ -3,6 +3,8 @@ library("RODBC")
 library("sqldf")
 library("readr")
 library("lubridate")
+library("compareDF")
+library("compare")
 # library("mailr")
 
 ################################################################################################
@@ -74,6 +76,21 @@ con <- odbcConnect("covidSQLPipe", uid = u, pwd = p)
 # How up to date is the counties table?
 qCountyMaxDate <- sqlQuery(con, "SELECT max(date) as maxDate FROM [COVID].[counties]")
 qCountyMaxDate <- qCountyMaxDate$maxDate
+newRecords
+
+
+# "SELECT * FROM [COVID].[counties]"
+
+dupChk <- sqlQuery(con, "SELECT * FROM [COVID].[counties]")
+count(dupChk)
+dup <- distinct(dupChk)
+count(dup)
+
+comp <- compare_df(dupChk, counties_csv)
+
+com <- compare(dupChk, counties_csv, allowAll = TRUE)
+
+#duplicated <- sqlQuery(con, "select max(date) as date, count(date) as recct from [COVID].[counties] group by date order by date desc")
 
 
 # Select only the new records from the github data
@@ -87,7 +104,7 @@ rec <- as.numeric(rec)
 ### Sorting for log
 if(rec > 0) {
 	# Update to the counties table and update the log with the date and 
-	#sqlSave(con, newRecords, tablename = "COVID.counties", rownames = F, append = T)
+	sqlSave(con, newRecords, tablename = "COVID.counties", rownames = F, append = T)
 	time <- as.character(now())
 	str <- "New COUNTY records were ADDED on:" 
 	newData <- as.character(paste(str, time))
