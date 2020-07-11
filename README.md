@@ -7,5 +7,6 @@
   * Determine the most recent record in the database
   * Add any new records
   * Log results to a file
-  * Email admin if failure to update or if duplicates are detected
+  * Separate log for serious errors
+  * Email admin if failure to update or if duplicates are detected (Not Implemented)
   * Run on a daily basis (Task Scheduler)
