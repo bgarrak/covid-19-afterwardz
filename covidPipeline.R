@@ -62,12 +62,13 @@ logEnv <- Sys.getenv("A_D_Log")
 con <- odbcConnect("covidSQLPipe", uid = u, pwd = p)
 
 
-		# test  <- sqlQuery(con, "SELECT * FROM [COVID].[counties]")
+### Tests ### 
+#	test <- sqlQuery(con, "SELECT * FROM [COVID].[counties]")
 
-# How many records are in the databases?
-#qCountyRecCnt
+#	How many records are in the databases?
+#	qCountyRecCnt
 
-#qStateRecCnt
+#	qStateRecCnt
 
 ################################################################################################
 
@@ -77,18 +78,14 @@ qCountyMaxDate <- qCountyMaxDate$maxDate
 
 
 ################################################################################################
-# "SELECT * FROM [COVID].[counties]"
+	# "SELECT * FROM [COVID].[counties]"
 
 dupChk <- sqlQuery(con, "SELECT * FROM [COVID].[counties]")
 count(dupChk)
 dup <- distinct(dupChk)
 count(dup)
 
-# comp <- compare_df(dupChk, counties_csv)
-
-# com <- compare(dupChk, counties_csv, allowAll = TRUE)
-
-#duplicated <- sqlQuery(con, "select max(date) as date, count(date) as recct from [COVID].[counties] group by date order by date desc")
+	#duplicated <- sqlQuery(con, "select max(date) as date, count(date) as recct from [COVID].[counties] group by date order by date desc")
 ################################################################################################
 
 
