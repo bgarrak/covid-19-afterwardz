@@ -13,4 +13,4 @@
 
 
 
-## Check out the project here: [Tracking Covid-19 Across Time and County](https://public.tableau.com/app/profile/willowfinch/viz/COVID_15856941695900/About)
+### Check out the project here: [Tracking Covid-19 Across Time and County](https://public.tableau.com/app/profile/willowfinch/viz/COVID_15856941695900/About)
