@@ -1,6 +1,6 @@
-# covid-19-afterwardz
+covid-19-afterwardz
 
-### This script will: 
+This script will: 
 
  Download the most recent Covid-19 data from the [NYT](https://github.com/nytimes/covid-19-data) \
  Open an ODBC channel to the afterwardz covid database \
