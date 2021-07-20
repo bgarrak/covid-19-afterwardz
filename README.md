@@ -10,3 +10,7 @@
  * Separate log for serious errors 
  * Email admin if failure to update or if duplicates are detected (Not Implemented) 
  * Run on a daily basis (Task Scheduler)
+
+
+
+## Check out the project here: [Tracking Covid-19 Across Time and County](https://public.tableau.com/app/profile/willowfinch/viz/COVID_15856941695900/About)
